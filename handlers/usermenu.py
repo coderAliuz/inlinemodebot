@@ -3,7 +3,17 @@ from config import dp
 from state import MainState
 from aiogram.dispatcher import FSMContext
 from keyboards import *
-from model import data_edit_fullname
+from model import data_edit_fullname,delete_users,about_users,count_users
+
+@dp.message_handler(text="Men haqimda",state=MainState.main)
+async def about_me(message:Message):
+    info=about_users(message.chat.id)
+    await message.reply(f"{info[1]}\Telefon: {info[2]}")
+
+@dp.message_handler(text="Bot haqida",state=MainState.main)
+async def about_bot(message:Message):
+    info=count_users()
+    await message.reply(f"Bot foydalanuvchilari -{info} ta")
 
 @dp.message_handler(text="Ortga",state=MainState.editfullname)
 @dp.message_handler(text="Tahrirlash",state=MainState.main)
@@ -27,3 +37,9 @@ async def edit_fullname(message:Message):
 async def back(message:Message):
     await message.answer("Kerakli bo'limni tanlang",reply_markup=main_kb)
     await MainState.main.set()
+
+@dp.message_handler(text="O'chirish",state=MainState.main)
+async def del_user(message:Message,state:FSMContext):
+    delete_users(message.chat.id)
+    await message.answer("Ma'lumotlaringiz o'chirildi.\nQayta /start ni bosing",reply_markup=del_kb)
+    await state.finish()

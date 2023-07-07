@@ -11,3 +11,7 @@ class MainState(StatesGroup):
     editfullname=State()
     editphone=State()
     deleteuser=State()
+
+class AdminState(StatesGroup):
+    main=State()
+    message=State()

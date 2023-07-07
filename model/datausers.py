@@ -18,3 +18,20 @@ def user_add(chat_id,fullname,phone):
 def data_edit_fullname(chat_id,fullname):
     cursor.execute(f"""UPDATE users SET fullname='{fullname}' WHERE id={chat_id}""")
     connect.commit()
+
+def delete_users(chat_id):
+    cursor.execute(f"DELETE FROM users WHERE id={chat_id}")
+    connect.commit()
+
+def count_users():
+    number=cursor.execute("SELECT COUNT(*) FROM users")
+    return number.fetchone()[0] #(10,)
+# print(count_users())
+
+def about_users(chat_id):
+    info=cursor.execute(f"SELECT * FROM users WHERE id={chat_id}")
+    return info.fetchone()
+
+def get_chat_ids():
+    ids=cursor.execute("SELECT id FROM users")
+    return ids.fetchall()
